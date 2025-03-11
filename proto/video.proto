@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package video;
+
+service VideoStreaming {
+  // Camera -> Server (client streaming)
+  rpc SendFrameStream(stream Frame) returns (UploadStatus) {};
+
+  // Server -> Viewer (server streaming)
+  rpc ReceiveFrameStream(StreamRequest) returns (stream Frame) {};
+}
+
+message Frame {
+  bytes image_data = 1;    // JPEG encoded bytes
+  int64 timestamp = 2;     // Unix timestamp in milliseconds
+}
+
+message UploadStatus {
+  bool success = 1;
+  string message = 2;
+}
+
+message StreamRequest {
+  // Future parameters (optional)
+}
