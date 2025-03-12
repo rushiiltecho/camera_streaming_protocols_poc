@@ -1,21 +1,25 @@
+import sys
 import grpc
 import cv2
 import time
 import argparse
+
 import proto.video_pb2 as video_pb2
 import proto.video_pb2_grpc as video_pb2_grpc
 
 def generate_frames(camera_id, source=0):
     cap = cv2.VideoCapture(source)
-    if not cap.isOpened():
-        print(f"Error: Could not open camera {source} for camera_id {camera_id}")
-        return
-    
+    prev_time = time.time()
     try:
         while True:
             ret, frame = cap.read()
+            # Calculate and display FPS
+            current_time = time.time()
+            fps = 1.0 / (current_time - prev_time)
+            prev_time = current_time
+            cv2.putText(frame, f'FPS: {fps:.2f}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
             if not ret:
-                print(f"Failed to capture frame from camera {source}")
+                print("Failed to capture frame")
                 break
                 
             # Encode as JPEG
@@ -36,13 +40,13 @@ def generate_frames(camera_id, source=0):
         print("\nStopping camera stream...")
     finally:
         cap.release()
-        print(f"Camera {source} resources released")
+        print("Camera resources released")
 
 def run(camera_id, server_address, source=0):
     try:
         channel = grpc.insecure_channel(server_address)
         stub = video_pb2_grpc.VideoStreamingStub(channel)
-        print(f"Starting stream for camera {camera_id} (source {source}) to server at {server_address}")
+        print(f"Starting stream for camera {camera_id} to server at {server_address}")
         
         response = stub.SendFrameStream(generate_frames(camera_id, source))
         print(f"Streaming completed: {response.message}")
@@ -62,4 +66,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     camera_id = args.camera_id
-    run(camera_id, args.server, camera_id)
+    run(camera_id, args.server, args.source)
