@@ -1,0 +1,72 @@
+// camera.proto
+syntax = "proto3";
+
+package camera;
+
+// Camera service definition
+service CameraService {
+  // List all available cameras
+  rpc ListCameras(ListCamerasRequest) returns (ListCamerasResponse) {}
+  
+  // Get information about a specific camera
+  rpc GetCameraInfo(CameraInfoRequest) returns (CameraInfo) {}
+  
+  // Get a single frame from a camera
+  rpc GetFrame(FrameRequest) returns (FrameResponse) {}
+  
+  // Stream frames from a camera
+  rpc StreamFrames(StreamRequest) returns (stream FrameResponse) {}
+}
+
+// Request to list all cameras
+message ListCamerasRequest {
+  // No parameters needed
+}
+
+// Response containing all available cameras
+message ListCamerasResponse {
+  repeated CameraInfo cameras = 1;
+}
+
+// Request to get camera information
+message CameraInfoRequest {
+  int32 id = 1; // Camera ID
+}
+
+// Camera information
+message CameraInfo {
+  int32 id = 1;        // Camera ID
+  string name = 2;     // Camera name or description
+  int32 width = 3;     // Default resolution width
+  int32 height = 4;    // Default resolution height
+  int32 fps = 5;       // Default frame rate
+  string status = 6;   // Camera status (available, busy, offline)
+}
+
+// Request for a single frame
+message FrameRequest {
+  int32 camera_id = 1; // Camera ID
+  int32 width = 2;     // Requested width (0 for default)
+  int32 height = 3;    // Requested height (0 for default)
+  int32 fps = 4;       // Requested fps (0 for default)
+}
+
+// Request to stream frames
+message StreamRequest {
+  int32 camera_id = 1; // Camera ID
+  int32 width = 2;     // Requested width (0 for default)
+  int32 height = 3;    // Requested height (0 for default)
+  int32 fps = 4;       // Requested fps (0 for default)
+  int32 quality = 5;   // JPEG quality (1-100, default 90)
+}
+
+// Response containing a frame
+message FrameResponse {
+  int32 camera_id = 1;    // Camera ID
+  int64 timestamp = 2;    // Timestamp in milliseconds
+  int32 width = 3;        // Frame width
+  int32 height = 4;       // Frame height
+  string format = 5;      // Image format (jpeg, raw, etc.)
+  bytes data = 6;         // Frame data
+  string error = 7;       // Error message (if any)
+}
