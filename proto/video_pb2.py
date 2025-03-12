@@ -24,19 +24,25 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bvideo.proto\x12\x05video\".\n\x05\x46rame\x12\x12\n\nimage_data\x18\x01 \x01(\x0c\x12\x11\n\ttimestamp\x18\x02 \x01(\x03\"0\n\x0cUploadStatus\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"\x0f\n\rStreamRequest2\x88\x01\n\x0eVideoStreaming\x12\x38\n\x0fSendFrameStream\x12\x0c.video.Frame\x1a\x13.video.UploadStatus\"\x00(\x01\x12<\n\x12ReceiveFrameStream\x12\x14.video.StreamRequest\x1a\x0c.video.Frame\"\x00\x30\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bvideo.proto\x12\x05video\"=\n\x0b\x43\x61meraFrame\x12\x11\n\tcamera_id\x18\x01 \x01(\t\x12\x1b\n\x05\x66rame\x18\x02 \x01(\x0b\x32\x0c.video.Frame\".\n\x05\x46rame\x12\x12\n\nimage_data\x18\x01 \x01(\x0c\x12\x11\n\ttimestamp\x18\x02 \x01(\x03\"0\n\x0cUploadStatus\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"\"\n\rStreamRequest\x12\x11\n\tcamera_id\x18\x01 \x01(\t\"\x14\n\x12ListCamerasRequest\")\n\x13ListCamerasResponse\x12\x12\n\ncamera_ids\x18\x01 \x03(\t2\xd6\x01\n\x0eVideoStreaming\x12>\n\x0fSendFrameStream\x12\x12.video.CameraFrame\x1a\x13.video.UploadStatus\"\x00(\x01\x12<\n\x12ReceiveFrameStream\x12\x14.video.StreamRequest\x1a\x0c.video.Frame\"\x00\x30\x01\x12\x46\n\x0bListCameras\x12\x19.video.ListCamerasRequest\x1a\x1a.video.ListCamerasResponse\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'video_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_FRAME']._serialized_start=22
-  _globals['_FRAME']._serialized_end=68
-  _globals['_UPLOADSTATUS']._serialized_start=70
-  _globals['_UPLOADSTATUS']._serialized_end=118
-  _globals['_STREAMREQUEST']._serialized_start=120
-  _globals['_STREAMREQUEST']._serialized_end=135
-  _globals['_VIDEOSTREAMING']._serialized_start=138
-  _globals['_VIDEOSTREAMING']._serialized_end=274
+  _globals['_CAMERAFRAME']._serialized_start=22
+  _globals['_CAMERAFRAME']._serialized_end=83
+  _globals['_FRAME']._serialized_start=85
+  _globals['_FRAME']._serialized_end=131
+  _globals['_UPLOADSTATUS']._serialized_start=133
+  _globals['_UPLOADSTATUS']._serialized_end=181
+  _globals['_STREAMREQUEST']._serialized_start=183
+  _globals['_STREAMREQUEST']._serialized_end=217
+  _globals['_LISTCAMERASREQUEST']._serialized_start=219
+  _globals['_LISTCAMERASREQUEST']._serialized_end=239
+  _globals['_LISTCAMERASRESPONSE']._serialized_start=241
+  _globals['_LISTCAMERASRESPONSE']._serialized_end=282
+  _globals['_VIDEOSTREAMING']._serialized_start=285
+  _globals['_VIDEOSTREAMING']._serialized_end=499
 # @@protoc_insertion_point(module_scope)

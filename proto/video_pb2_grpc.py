@@ -36,13 +36,18 @@ class VideoStreamingStub(object):
         """
         self.SendFrameStream = channel.stream_unary(
                 '/video.VideoStreaming/SendFrameStream',
-                request_serializer=video__pb2.Frame.SerializeToString,
+                request_serializer=video__pb2.CameraFrame.SerializeToString,
                 response_deserializer=video__pb2.UploadStatus.FromString,
                 _registered_method=True)
         self.ReceiveFrameStream = channel.unary_stream(
                 '/video.VideoStreaming/ReceiveFrameStream',
                 request_serializer=video__pb2.StreamRequest.SerializeToString,
                 response_deserializer=video__pb2.Frame.FromString,
+                _registered_method=True)
+        self.ListCameras = channel.unary_unary(
+                '/video.VideoStreaming/ListCameras',
+                request_serializer=video__pb2.ListCamerasRequest.SerializeToString,
+                response_deserializer=video__pb2.ListCamerasResponse.FromString,
                 _registered_method=True)
 
 
@@ -63,18 +68,30 @@ class VideoStreamingServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ListCameras(self, request, context):
+        """List available cameras
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_VideoStreamingServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'SendFrameStream': grpc.stream_unary_rpc_method_handler(
                     servicer.SendFrameStream,
-                    request_deserializer=video__pb2.Frame.FromString,
+                    request_deserializer=video__pb2.CameraFrame.FromString,
                     response_serializer=video__pb2.UploadStatus.SerializeToString,
             ),
             'ReceiveFrameStream': grpc.unary_stream_rpc_method_handler(
                     servicer.ReceiveFrameStream,
                     request_deserializer=video__pb2.StreamRequest.FromString,
                     response_serializer=video__pb2.Frame.SerializeToString,
+            ),
+            'ListCameras': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListCameras,
+                    request_deserializer=video__pb2.ListCamerasRequest.FromString,
+                    response_serializer=video__pb2.ListCamerasResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -102,7 +119,7 @@ class VideoStreaming(object):
             request_iterator,
             target,
             '/video.VideoStreaming/SendFrameStream',
-            video__pb2.Frame.SerializeToString,
+            video__pb2.CameraFrame.SerializeToString,
             video__pb2.UploadStatus.FromString,
             options,
             channel_credentials,
@@ -131,6 +148,33 @@ class VideoStreaming(object):
             '/video.VideoStreaming/ReceiveFrameStream',
             video__pb2.StreamRequest.SerializeToString,
             video__pb2.Frame.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ListCameras(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/video.VideoStreaming/ListCameras',
+            video__pb2.ListCamerasRequest.SerializeToString,
+            video__pb2.ListCamerasResponse.FromString,
             options,
             channel_credentials,
             insecure,

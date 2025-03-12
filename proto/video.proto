@@ -4,10 +4,18 @@ package video;
 
 service VideoStreaming {
   // Camera -> Server (client streaming)
-  rpc SendFrameStream(stream Frame) returns (UploadStatus) {};
+  rpc SendFrameStream(stream CameraFrame) returns (UploadStatus) {};
 
   // Server -> Viewer (server streaming)
   rpc ReceiveFrameStream(StreamRequest) returns (stream Frame) {};
+
+  // List available cameras
+  rpc ListCameras(ListCamerasRequest) returns (ListCamerasResponse) {};
+}
+
+message CameraFrame {
+  string camera_id = 1;    // Unique camera identifier
+  Frame frame = 2;         // Frame data
 }
 
 message Frame {
@@ -21,5 +29,11 @@ message UploadStatus {
 }
 
 message StreamRequest {
-  // Future parameters (optional)
+  string camera_id = 1;    // Which camera to stream
+}
+
+message ListCamerasRequest {}
+
+message ListCamerasResponse {
+  repeated string camera_ids = 1;  // List of active camera IDs
 }
