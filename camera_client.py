@@ -420,11 +420,11 @@ def display_multiple_cameras(client, camera_ids, window_name="Camera Feed"):
             
             # Update FPS calculation
             frame_count += 1
-            elapsed_time = time.time() - start_time
-            if elapsed_time >= 1.0:
-                fps = frame_count / elapsed_time
-                frame_count = 0
-                start_time = time.time()
+            current_time = time.time()
+        
+            fps = 1 / (current_time-start_time)
+            frame_count = 0
+            start_time = current_time
             
             # Determine grid layout
             num_cameras = len(frames)

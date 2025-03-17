@@ -209,6 +209,7 @@ class SingleCameraViewer:
                     # Update statistics
                     self.update_statistics(timestamp)
                     frames_since_update += 1
+                    current_time = time.time()
                     
                     # Record frame if recording is active
                     if self.recording and self.video_writer:
@@ -218,11 +219,9 @@ class SingleCameraViewer:
                             logger.error(f"Error writing frame to video: {str(e)}")
                     
                     # Update FPS display every second
-                    current_time = time.time()
-                    if current_time - last_fps_update >= 1.0:
-                        fps_display = frames_since_update / (current_time - last_fps_update)
-                        frames_since_update = 0
-                        last_fps_update = current_time
+                    fps_display = 1 / (current_time - last_fps_update)
+                    frames_since_update = 0
+                    last_fps_update = current_time
                     
                     # Add information overlay
                     frame_with_info = frame.copy()
@@ -232,7 +231,7 @@ class SingleCameraViewer:
                                (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
                     
                     # Add FPS info
-                    cv2.putText(frame_with_info, f"FPS: {fps_display:.1f}", 
+                    cv2.putText(frame_with_info, f"FPS: {fps_display:.2f}", 
                                (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
                     
                     # Add timestamp if available
